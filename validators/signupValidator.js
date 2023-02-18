@@ -24,6 +24,21 @@ const validateCreate = [
     .isEmail()
     .withMessage('Please enter a valid email address'),
 
+  check('partner_name')
+    .exists()
+    .not()
+    .isEmpty()
+    .isString()
+    .matches(/^[^0-9]*$/)
+    .withMessage('The partners name must not contain numbers'),
+
+  check('date')
+    .exists()
+    .not()
+    .isEmpty()
+    .isDate()
+    .withMessage('Please enter a valid date'),
+
   (request, response, next) => {
     validateResult(request, response, next)
   }
