@@ -9,12 +9,4 @@ const db = createPool({
   database: 'wedding_app_db'
 })
 
-// db.connect(error => {
-//   if (error) {
-//     console.log(error.message);
-//     return;
-//   }
-//   console.log('Database connected');
-// });
-
 module.exports = db
