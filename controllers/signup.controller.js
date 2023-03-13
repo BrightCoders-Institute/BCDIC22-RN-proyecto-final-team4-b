@@ -22,10 +22,9 @@ const createAccount = (request, response) => {
 }
 
 const createUser = async (req, res) => {
-  const { password, confirmPassword, email } = req.body
+  const { user_name, partner_name, date,password, confirmPassword, email } = req.body
   console.log(
     'estoy en signup back',
-
     'passwrod',
     password,
     'passwrodConfirm',
