@@ -10,7 +10,7 @@ app.use(express.json())
 const signupRoutes = require('./routes/signup.routes')
 const loginRoutes = require('./routes/login.routes')
 app.use('/api/v1/signup',signupRoutes)
-app.use(loginRoutes)
+app.use('/api/v1/login',loginRoutes)
 
 app.listen(PORT, () => {
   console.log('Server running on port', PORT)
