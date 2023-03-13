@@ -1,26 +1,6 @@
 const db = require('../db/db')
 const bcryptjs = require('bcryptjs')
 
-let createAccountScreenInfo = null
-
-const createAccount = (request, response) => {
-  const { user_name, date, partner_name } = request.body
-  console.log('Estoy en account back', user_name, partner_name, date)
-  createAccountScreenInfo = {
-    user_name: user_name,
-    partner_name: partner_name,
-    date: date
-  }
-
-  if (user_name && partner_name && date) {
-    response.status(200).send({ message: 'Data saved' })
-  } else {
-    response.status(400).send({ message: 'Please fill all the fields to continue' })
-  }
-
-  console.log('createAccountScreenInfo', createAccountScreenInfo)
-}
-
 const createUser = async (req, res) => {
   const { user_name, partner_name, date,password, confirmPassword, email } = req.body
   console.log(
