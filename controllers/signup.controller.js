@@ -1,18 +1,28 @@
 const db = require('../db/db')
-const { validateCreate } = require('../validators/signupValidator')
 const bcryptjs = require('bcryptjs')
 
 const createUser = async (req, res) => {
-  const { user_name, password, confirmPassword, email, date, partner_name } =
-    req.body
+  const { user_name, partner_name, date,password, confirmPassword, email } = req.body
+  console.log(
+    'estoy en signup back',
+    'passwrod',
+    password,
+    'passwrodConfirm',
+    confirmPassword,
+    'email',
+    email
+  )
+
   const [alreadyExists] = await db.query('SELECT * FROM User WHERE email=?', [
     email
   ])
+
   if (alreadyExists.length) {
     res.status(409).send({ message: 'User already exists' })
   } else {
     //encriptar clave:
     if (password === confirmPassword) {
+      console.log('E NOPXISTS____', alreadyExists)
       try {
         const salt = await bcryptjs.genSalt(10)
         const hashedPassword = await bcryptjs.hash(password, salt)
@@ -20,13 +30,14 @@ const createUser = async (req, res) => {
           'INSERT INTO User (user_name, password, email, date, partner_name) VALUES(?,?,?,?,?)',
           [user_name, hashedPassword, email, date, partner_name]
         )
-        res.send({
+        res.status(200).send({
           id: rows.insertId,
           user_name,
           hashedPassword,
           email,
           date,
-          partner_name
+          partner_name,
+          message: 'User created successfully'
         })
       } catch (error) {
         console.error(error)
@@ -41,5 +52,6 @@ const createUser = async (req, res) => {
 }
 
 module.exports = {
+  createAccount,
   createUser
 }
