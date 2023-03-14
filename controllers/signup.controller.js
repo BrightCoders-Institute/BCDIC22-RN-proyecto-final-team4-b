@@ -3,16 +3,6 @@ const bcryptjs = require('bcryptjs')
 
 const createUser = async (req, res) => {
   const { user_name, partner_name, date,password, confirmPassword, email } = req.body
-  console.log(
-    'estoy en signup back',
-    'passwrod',
-    password,
-    'passwrodConfirm',
-    confirmPassword,
-    'email',
-    email
-  )
-
   const [alreadyExists] = await db.query('SELECT * FROM User WHERE email=?', [
     email
   ])
@@ -22,7 +12,6 @@ const createUser = async (req, res) => {
   } else {
     //encriptar clave:
     if (password === confirmPassword) {
-      console.log('E NOPXISTS____', alreadyExists)
       try {
         const salt = await bcryptjs.genSalt(10)
         const hashedPassword = await bcryptjs.hash(password, salt)
@@ -52,6 +41,5 @@ const createUser = async (req, res) => {
 }
 
 module.exports = {
-  createAccount,
   createUser
 }

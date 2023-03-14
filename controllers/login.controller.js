@@ -2,13 +2,11 @@ const db = require('../db/db')
 const bcryptjs = require('bcryptjs')
 
 const loginUser = async (request, response) => {
-  console.log("login back")
   const { password, email } = request.body
   const [userExists] = await db.query('SELECT * FROM User WHERE email=?;', [
     email
   ])
 
-  console.log(userExists,"exsisi")
   if (userExists.length) {
     const isMatch = await bcryptjs.compare(password, userExists[0].password)
     if (isMatch) {
