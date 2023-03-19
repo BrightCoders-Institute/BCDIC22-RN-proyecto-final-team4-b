@@ -2,7 +2,6 @@ const db = require('../db/db')
 const bcryptjs = require('bcryptjs')
 
 const loginUser = async (request, response) => {
-  console.log("estoy en login")
   const { password, email } = request.body
   const [userExists] = await db.query('SELECT * FROM User WHERE email=?;', [
     email

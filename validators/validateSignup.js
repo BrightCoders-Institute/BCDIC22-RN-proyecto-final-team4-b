@@ -16,7 +16,6 @@ const validateSignup = [
     .isEmail()
     .withMessage('Please enter a valid email address'),
 
-
   (request, response, next) => {
     validateResult(request, response, next)
   }
