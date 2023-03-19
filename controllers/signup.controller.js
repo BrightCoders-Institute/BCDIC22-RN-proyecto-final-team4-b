@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
           [user_name, hashedPassword, email, date, partner_name]
         )
         const userId = result.insertId
-        const [[userExists]] = await db.query('SELECT * FROM User WHERE id=?', [userId])
+        const [[userExists]] = await db.query('SELECT * FROM User WHERE id_user=?', [userId])
         res.status(200).send({
           message: 'User created successfully',
           userExists
