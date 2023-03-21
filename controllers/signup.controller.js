@@ -15,18 +15,15 @@ const createUser = async (req, res) => {
       try {
         const salt = await bcryptjs.genSalt(10)
         const hashedPassword = await bcryptjs.hash(password, salt)
-        const [rows] = await db.query(
+        const [result] = await db.query(
           'INSERT INTO User (user_name, password, email, date, partner_name) VALUES(?,?,?,?,?)',
           [user_name, hashedPassword, email, date, partner_name]
         )
+        const userId = result.insertId
+        const [userExists] = await db.query('SELECT * FROM User WHERE id_user=?', [userId])
         res.status(200).send({
-          id: rows.insertId,
-          user_name,
-          hashedPassword,
-          email,
-          date,
-          partner_name,
-          message: 'User created successfully'
+          message: 'User created successfully',
+          userExists
         })
       } catch (error) {
         console.error(error)
@@ -39,6 +36,7 @@ const createUser = async (req, res) => {
     }
   }
 }
+
 
 module.exports = {
   createUser
