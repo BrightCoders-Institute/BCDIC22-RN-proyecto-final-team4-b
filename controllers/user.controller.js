@@ -1,13 +1,13 @@
 const db = require('../db/db')
 const bcryptjs = require('bcryptjs')
+const User = require('../models/user')
 
 const getUserByEmail = async (req, res) => {
   const email = req.params.email
 
-  const [userExists] = await db.query('SELECT * FROM User WHERE email=?;', [
-    email
-  ])
-  if (userExists.length) {
+  const userExists=await User.findOne({ email })
+
+  if (userExists) {
     res.status(200).send({ message: 'User exissts', userExists })
   } else {
     res.status(400).send({ message: 'User not found' })
@@ -18,44 +18,40 @@ const updateUser = async (request, response) => {
   const id = request.params.id
   const { date, partner_name, password, user_name } = request.body
 
-  const [userExists] = await db.query('SELECT * FROM User WHERE id_user=?;', [
-    id
-  ])
+  try {
+    const userExists = await User.findById(id)
 
-  if (userExists.length) {
-    if (password===userExists[0].password) {
-      await db.query(
-        'UPDATE User SET date=?, partner_name=?, password=?, user_name=? WHERE id_user=?;',
-        [date, partner_name, password, user_name, id]
-      )
-      const [updatedUser] = await db.query(
-        'SELECT * FROM User WHERE id_user=?;',
-        [id]
-      )
+    if (userExists) {
+      if (password === userExists.password) {
+        userExists.date = date
+        userExists.partner_name = partner_name
+        userExists.user_name = user_name
 
-      response
-        .status(200)
-        .send({ user: updatedUser, message: 'User data updated' })
-    } else{
-      const salt = await bcryptjs.genSalt(10)
-      const hashedPassword = await bcryptjs.hash(password, salt)
-      await db.query(
-        'UPDATE User SET date=?, partner_name=?, password=?, user_name=? WHERE id_user=?;',
-        [date, partner_name, hashedPassword, user_name, id]
-      )
-      const [updatedUser] = await db.query(
-        'SELECT * FROM User WHERE id_user=?;',
-        [id]
-      )
+        await userExists.save()
 
-      response
-        .status(200)
-        .send({ user: updatedUser, message: 'User data updated' })
+        response
+          .status(200)
+          .send({ user: userExists, message: 'User data updated' })
+      } else {
+        const salt = await bcryptjs.genSalt(10)
+        const hashedPassword = await bcryptjs.hash(password, salt)
+
+        userExists.date = date
+        userExists.partner_name = partner_name
+        userExists.password = hashedPassword
+        userExists.user_name = user_name
+
+        await userExists.save()
+
+        response
+          .status(200)
+          .send({ user: userExists, message: 'User data updated' })
+      }
+    } else {
+      response.status(400).send({ message: 'User not found' })
     }
-
-    
-  } else {
-    response.status(400).send({ message: 'User not found' })
+  } catch (error) {
+    response.status(500).send({ message: error.message })
   }
 }
 

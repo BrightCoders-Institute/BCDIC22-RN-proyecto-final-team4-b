@@ -8,7 +8,6 @@ const loginUser = async (request, response) => {
   const userExists=await User.findOne({ email })
 
   if (userExists) {
-    console.log("PASSWORD",userExists)
     const isMatch = await bcryptjs.compare(password, userExists.hashedPassword)
     if (isMatch) {
       response.status(200).send({ message: 'Successful login' ,userExists})
