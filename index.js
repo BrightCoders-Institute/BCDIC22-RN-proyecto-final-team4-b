@@ -15,7 +15,8 @@ app.use('/api/v1/signup',signupRoutes)
 app.use('/api/v1/login',loginRoutes)
 app.use('/api/v1/user',userRoutes)
 
-db()
+
 app.listen(PORT, () => {
   console.log('Server running on port', PORT)
+  db()
 })
