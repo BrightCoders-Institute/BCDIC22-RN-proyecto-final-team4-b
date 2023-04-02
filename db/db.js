@@ -1,12 +1,17 @@
-const { createPool } = require('mysql2/promise')
-require('dotenv').config()
+const mongoose = require('mongoose');
 
-const db = createPool({
-  host: process.env.DB_HOST,
-  port: '3306',
-  user: 'admin',
-  password: process.env.DB_PASSWORD,
-  database: 'wedding_app_db'
-})
+mongoose.set('strictQuery', false);
 
-module.exports = db
+const dbConnection = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        console.log('Successful connected to MongoDB');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = dbConnection;
