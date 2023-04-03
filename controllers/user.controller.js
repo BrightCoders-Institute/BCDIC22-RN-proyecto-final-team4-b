@@ -1,5 +1,5 @@
 const db = require('../db/db')
-const bcryptjs = require('bcryptjs')
+const cryptojs = require('crypto-js')
 const User = require('../models/user')
 
 const getUserByEmail = async (req, res) => {
@@ -7,16 +7,18 @@ const getUserByEmail = async (req, res) => {
 
   const userExists = await User.findOne({ email })
 
-  if (userExists) {   
+  if (userExists) {
     const date = new Date(userExists.date)
     const formattedDate = date.toLocaleDateString('en-GB')
+    const bytes = cryptojs.AES.decrypt(userExists.hashedPassword, process.env.CRYPTO_KEY)
+    const decryptedPassword = bytes.toString(cryptojs.enc.Utf8)
 
-    const userToShow={
-      user_name:userExists.user_name,
-      hashedPassword: userExists.hashedPassword,
-      email:userExists.email,
+    const userToShow = {
+      user_name: userExists.user_name,
+      hashedPassword: decryptedPassword,
+      email: userExists.email,
       date: formattedDate,
-      partner_name:userExists.partner_name
+      partner_name: userExists.partner_name
     }
 
     res.status(200).send({ message: 'User exists', userToShow })
