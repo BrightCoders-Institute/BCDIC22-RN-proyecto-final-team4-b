@@ -49,7 +49,6 @@ const updateUser = async (request, response) => {
       const isoString = dateObj.toISOString()
 
       if (password === decryptedPassword) {
-        console.log(decryptedPassword, password, 'SAME')
         userExists.date = isoString
         userExists.partner_name = partner_name
         userExists.user_name = user_name
@@ -60,7 +59,6 @@ const updateUser = async (request, response) => {
           .status(200)
           .send({ user: userExists, message: 'User data updated' })
       } else {
-        console.log(decryptedPassword, password, 'NOT')
         const hashedPassword = cryptojs.AES.encrypt(
           password,
           process.env.CRYPTO_KEY

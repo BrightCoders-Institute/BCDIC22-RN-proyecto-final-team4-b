@@ -18,7 +18,7 @@ const validateUserUpdate = [
 
   check('date').exists().withMessage('A wedding date is required'),
 
-  check('password')
+  check('hashedPassword')
     .exists()
     .isLength({ min: 8 })
     .withMessage('The password must be at least 8 characters long')
