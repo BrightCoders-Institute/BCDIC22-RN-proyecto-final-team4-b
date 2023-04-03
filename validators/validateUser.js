@@ -3,17 +3,18 @@ const { validateResult } = require('../helpers/validationsHelper')
 
 const validateUserUpdate = [
   check('partner_name')
-    .exists()
-    .withMessage('A partner name is required')
-    .isString()
-    .matches(/^[a-zA-Z]+$/)
-    .withMessage('The partner name can only contain letters'),
+  .exists()
+  .withMessage('A partner name is required')
+  .isString()
+  .matches(/^[a-zA-Z ]+$/)
+  .withMessage('The partner name can only contain letters and spaces'),
+
 
   check('user_name')
     .exists()
     .withMessage('A user name is required')
     .isString()
-    .matches(/^[a-zA-Z]+$/)
+    .matches(/^[a-zA-Z ]+$/)
     .withMessage('The user name can only contain letters'),
 
   check('date').exists().withMessage('A wedding date is required'),
