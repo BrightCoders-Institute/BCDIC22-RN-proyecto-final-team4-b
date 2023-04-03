@@ -34,7 +34,7 @@ const getUserByEmail = async (req, res) => {
 
 const updateUser = async (request, response) => {
   const id = request.params.id
-  const { date, partner_name, password, user_name } = request.body
+  const { date, partner_name, hashedPassword, user_name } = request.body
 
   try {
     const objectId = new ObjectId(id);
@@ -51,7 +51,7 @@ const updateUser = async (request, response) => {
       const dateObj = new Date(dateString)
       const isoString = dateObj.toISOString()
 
-      if (password === decryptedPassword) {
+      if (hashedPassword === decryptedPassword) {
         userExists.date = isoString
         userExists.partner_name = partner_name
         userExists.user_name = user_name
@@ -62,14 +62,14 @@ const updateUser = async (request, response) => {
           .status(200)
           .send({ user: userExists, message: 'User data updated' })
       } else {
-        const hashedPassword = cryptojs.AES.encrypt(
-          password,
+        const _hashedPassword = cryptojs.AES.encrypt(
+          hashedPassword,
           process.env.CRYPTO_KEY
         ).toString()
 
         userExists.date = isoString
         userExists.partner_name = partner_name
-        userExists.hashedPassword = hashedPassword
+        userExists.hashedPassword = _hashedPassword
         userExists.user_name = user_name
 
         await userExists.save()
