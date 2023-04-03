@@ -1,4 +1,5 @@
-const db = require('../db/db')
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const cryptojs = require('crypto-js')
 const User = require('../models/user')
 
@@ -35,7 +36,8 @@ const updateUser = async (request, response) => {
   const { date, partner_name, password, user_name } = request.body
 
   try {
-    const userExists = await User.findById(id)
+    const objectId = new ObjectId(id);
+    const userExists = await User.findById(objectId)
 
     if (userExists) {
       const bytes = cryptojs.AES.decrypt(
