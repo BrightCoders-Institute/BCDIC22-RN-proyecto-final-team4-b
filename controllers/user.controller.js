@@ -38,18 +38,19 @@ const updateUser = async (request, response) => {
     const userExists = await User.findById(id)
 
     if (userExists) {
-
       const bytes = cryptojs.AES.decrypt(
         userExists.hashedPassword,
         process.env.CRYPTO_KEY
       )
       const decryptedPassword = bytes.toString(cryptojs.enc.Utf8)
 
-      console.log(decryptedPassword, password,"zzzzzzzzzzzs")
+      const dateString = date
+      const dateObj = new Date(dateString)
+      const isoString = dateObj.toISOString()
 
       if (password === decryptedPassword) {
-        console.log(decryptedPassword, password,"SAME")
-        userExists.date = date
+        console.log(decryptedPassword, password, 'SAME')
+        userExists.date = isoString
         userExists.partner_name = partner_name
         userExists.user_name = user_name
 
@@ -59,14 +60,13 @@ const updateUser = async (request, response) => {
           .status(200)
           .send({ user: userExists, message: 'User data updated' })
       } else {
-        console.log(decryptedPassword, password,"NOT")
+        console.log(decryptedPassword, password, 'NOT')
         const hashedPassword = cryptojs.AES.encrypt(
           password,
           process.env.CRYPTO_KEY
         ).toString()
 
-
-        userExists.date = date
+        userExists.date = isoString
         userExists.partner_name = partner_name
         userExists.hashedPassword = hashedPassword
         userExists.user_name = user_name
