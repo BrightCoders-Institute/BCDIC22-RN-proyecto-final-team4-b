@@ -18,6 +18,7 @@ const getUserByEmail = async (req, res) => {
     const decryptedPassword = bytes.toString(cryptojs.enc.Utf8)
 
     const userToShow = {
+      id:userExists._id,
       user_name: userExists.user_name,
       hashedPassword: decryptedPassword,
       email: userExists.email,
