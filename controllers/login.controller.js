@@ -1,4 +1,3 @@
-const db = require('../db/db')
 const cryptojs = require('crypto-js')
 const User = require('../models/user')
 

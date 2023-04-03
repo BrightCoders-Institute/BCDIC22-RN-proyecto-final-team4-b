@@ -10,7 +10,10 @@ const getUserByEmail = async (req, res) => {
   if (userExists) {
     const date = new Date(userExists.date)
     const formattedDate = date.toLocaleDateString('en-GB')
-    const bytes = cryptojs.AES.decrypt(userExists.hashedPassword, process.env.CRYPTO_KEY)
+    const bytes = cryptojs.AES.decrypt(
+      userExists.hashedPassword,
+      process.env.CRYPTO_KEY
+    )
     const decryptedPassword = bytes.toString(cryptojs.enc.Utf8)
 
     const userToShow = {
@@ -35,7 +38,17 @@ const updateUser = async (request, response) => {
     const userExists = await User.findById(id)
 
     if (userExists) {
-      if (password === userExists.password) {
+
+      const bytes = cryptojs.AES.decrypt(
+        userExists.hashedPassword,
+        process.env.CRYPTO_KEY
+      )
+      const decryptedPassword = bytes.toString(cryptojs.enc.Utf8)
+
+      console.log(decryptedPassword, password,"zzzzzzzzzzzs")
+
+      if (password === decryptedPassword) {
+        console.log(decryptedPassword, password,"SAME")
         userExists.date = date
         userExists.partner_name = partner_name
         userExists.user_name = user_name
@@ -46,12 +59,16 @@ const updateUser = async (request, response) => {
           .status(200)
           .send({ user: userExists, message: 'User data updated' })
       } else {
-        const salt = await bcryptjs.genSalt(10)
-        const hashedPassword = await bcryptjs.hash(password, salt)
+        console.log(decryptedPassword, password,"NOT")
+        const hashedPassword = cryptojs.AES.encrypt(
+          password,
+          process.env.CRYPTO_KEY
+        ).toString()
+
 
         userExists.date = date
         userExists.partner_name = partner_name
-        userExists.password = hashedPassword
+        userExists.hashedPassword = hashedPassword
         userExists.user_name = user_name
 
         await userExists.save()

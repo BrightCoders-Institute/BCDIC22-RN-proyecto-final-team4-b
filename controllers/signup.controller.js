@@ -18,7 +18,6 @@ const createUser = async (req, res) => {
           password,
           process.env.CRYPTO_KEY
         ).toString()
-        console.log(hashedPassword)
 
         const user = new User({
           user_name,
