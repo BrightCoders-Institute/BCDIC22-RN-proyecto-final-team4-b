@@ -13,8 +13,7 @@ const validatePersonalReqCreate = [
     .exists()
     .withMessage('A category is required')
     .isString()
-    .matches(/^[a-zA-Z ]+$/)
-    .withMessage('The category can only contain letters'),
+    .withMessage('A category is required'),
 
   check('wedding_id')
   .exists()

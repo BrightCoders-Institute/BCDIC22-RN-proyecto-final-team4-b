@@ -9,8 +9,7 @@ const personalReqSchema = new mongoose.Schema({
     type: Date
   },
   category:{
-    type: String,
-    required:true
+    type: String
   },
   notes: {
     type: String
