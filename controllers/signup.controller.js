@@ -1,32 +1,37 @@
 const db = require('../db/db')
-const { validateCreate } = require('../validators/signupValidator')
-const bcryptjs = require('bcryptjs')
+const cryptojs = require('crypto-js')
+const User = require('../models/user')
 
 const createUser = async (req, res) => {
-  const { user_name, password, confirmPassword, email, date, partner_name } =
+  const { user_name, partner_name, date, password, confirmPassword, email } =
     req.body
-  const [alreadyExists] = await db.query('SELECT * FROM User WHERE email=?', [
-    email
-  ])
-  if (alreadyExists.length) {
+
+  const alreadyExists = await User.findOne({ email })
+
+  if (alreadyExists) {
     res.status(409).send({ message: 'User already exists' })
   } else {
     //encriptar clave:
     if (password === confirmPassword) {
       try {
-        const salt = await bcryptjs.genSalt(10)
-        const hashedPassword = await bcryptjs.hash(password, salt)
-        const [rows] = await db.query(
-          'INSERT INTO User (user_name, password, email, date, partner_name) VALUES(?,?,?,?,?)',
-          [user_name, hashedPassword, email, date, partner_name]
-        )
-        res.send({
-          id: rows.insertId,
+        const hashedPassword = cryptojs.AES.encrypt(
+          password,
+          process.env.CRYPTO_KEY
+        ).toString()
+
+        const user = new User({
           user_name,
           hashedPassword,
           email,
           date,
           partner_name
+        })
+
+        const userSaved = await user.save()
+
+        res.status(200).send({
+          message: 'User created successfully',
+          userSaved
         })
       } catch (error) {
         console.error(error)
