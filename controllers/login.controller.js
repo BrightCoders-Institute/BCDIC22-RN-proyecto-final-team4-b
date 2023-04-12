@@ -1,14 +1,14 @@
 const db = require('../db/db')
 const bcryptjs = require('bcryptjs')
+const User=require('../models/user')
 
 const loginUser = async (request, response) => {
   const { password, email } = request.body
-  const [userExists] = await db.query('SELECT * FROM User WHERE email=?;', [
-    email
-  ])
 
-  if (userExists.length) {
-    const isMatch = await bcryptjs.compare(password, userExists[0].password)
+  const userExists=await User.findOne({ email })
+
+  if (userExists) {
+    const isMatch = await bcryptjs.compare(password, userExists.hashedPassword)
     if (isMatch) {
       response.status(200).send({ message: 'Successful login' ,userExists})
     } else {
