@@ -1,5 +1,5 @@
 const db = require('../db/db')
-const bcryptjs = require('bcryptjs')
+const cryptojs = require('crypto-js')
 const User = require('../models/user')
 
 const createUser = async (req, res) => {
@@ -14,8 +14,10 @@ const createUser = async (req, res) => {
     //encriptar clave:
     if (password === confirmPassword) {
       try {
-        const salt = await bcryptjs.genSalt(10)
-        const hashedPassword = await bcryptjs.hash(password, salt)
+        const hashedPassword = cryptojs.AES.encrypt(
+          password,
+          process.env.CRYPTO_KEY
+        ).toString()
 
         const user = new User({
           user_name,
