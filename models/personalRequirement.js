@@ -1,18 +1,25 @@
 const mongoose = require('mongoose')
 
 const personalReqSchema = new mongoose.Schema({
-  requirement_name: {
+  title: {
     type: String,
     required:true
   },
-  due_date:{
+  icon:{
+    type:String
+  },
+  date:{
     type: Date
   },
   category:{
     type: String
   },
-  notes: {
+  note: {
     type: String
+  },
+  isChecked:{
+    type: Boolean,
+    default:false
   },
   wedding_id:{
     type: mongoose.Schema.Types.ObjectId,

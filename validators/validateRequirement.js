@@ -2,12 +2,12 @@ const { check } = require('express-validator')
 const { validateResult } = require('../helpers/validationsHelper')
 
 const validatePersonalReqCreate = [
-  check('requirement_name')
+  check('title')
   .exists()
-  .withMessage('A requirement name is required')
+  .withMessage('A title is required')
   .isString(),
 
-  check('due_date').exists().withMessage('A due date is required'),
+  check('date').exists().withMessage('A due date is required'),
 
   check('category')
     .exists()

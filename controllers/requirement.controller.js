@@ -5,13 +5,13 @@ const PersonalReq = require('../models/personalRequirement')
 
 const createPersonalRequirement = async (req, res) => {
   console.log('Perosnalk', req.body)
-  const { requirement_name, due_date, category, notes, wedding_id } = req.body
+  const { title, date, category, note, wedding_id } = req.body
 
   const personalReq = new PersonalReq({
-    requirement_name,
-    due_date,
+    title,
+    date,
     category,
-    notes,
+    note,
     wedding_id
   })
 
@@ -25,6 +25,8 @@ const createPersonalRequirement = async (req, res) => {
 
 const getPersonalRequirements=async(req,res)=>{
     console.log("get")
+
+    
     res.status(200).send({
         message: 'Rgerequirement created successfully',
     
