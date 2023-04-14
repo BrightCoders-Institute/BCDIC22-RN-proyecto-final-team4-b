@@ -6,8 +6,7 @@ const PersonalReq = require('../models/personalRequirement')
 const ObjectId = mongoose.Types.ObjectId
 
 const createPersonalRequirement = async (req, res) => {
-  console.log('Perosnalk', req.body)
-  const { title, date, category, note, wedding_id,icon } = req.body
+  const { title, date, category, note, wedding_id, icon } = req.body
 
   const personalReq = new PersonalReq({
     title,
@@ -27,15 +26,13 @@ const createPersonalRequirement = async (req, res) => {
 }
 
 const getPersonalRequirements = async (req, res) => {
-  console.log('get')
   const weddingId = req.params.id
-  console.log('wedding_id', weddingId)
 
   try {
     const fullRequirements = await PersonalReq.find({
       wedding_id: new ObjectId(weddingId)
     })
-    console.log('fullRequirements', fullRequirements)
+
     res.status(200).send({
       message: 'Requirement created successfully',
       fullRequirements
@@ -49,21 +46,15 @@ const getPersonalRequirements = async (req, res) => {
 }
 
 const updatePersonalRequirement = async (req, res) => {
-  console.log('####___')
   try {
-    
     const query = req.query.isChecked
     const reqId = req.params.id
-    console.log('####', query, reqId)
-   
+
     const updatedRequirement = await PersonalReq.findByIdAndUpdate(
       reqId,
       { isChecked: query },
       { new: true }
     )
-
-
-
     res.status(200).send({
       message: 'Requirement created successfully',
       updatedRequirement
