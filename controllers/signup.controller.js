@@ -38,7 +38,7 @@ const createUser = async (req, res) => {
         const weddingCreated=await wedding.save()
 
         res.status(200).send({
-          message: 'User created successfully',
+          message: 'User created successfully. Please login',
           userSaved,
           weddingCreated
         })
