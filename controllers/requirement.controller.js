@@ -7,14 +7,15 @@ const ObjectId = mongoose.Types.ObjectId
 
 const createPersonalRequirement = async (req, res) => {
   console.log('Perosnalk', req.body)
-  const { title, date, category, note, wedding_id } = req.body
+  const { title, date, category, note, wedding_id,icon } = req.body
 
   const personalReq = new PersonalReq({
     title,
     date,
     category,
     note,
-    wedding_id
+    wedding_id,
+    icon
   })
 
   const newPersonalRequirement = await personalReq.save()
