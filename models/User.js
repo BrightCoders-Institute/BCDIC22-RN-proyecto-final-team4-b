@@ -1,58 +1,28 @@
-const Sequelize = require('sequelize')
+const mongoose = require('mongoose')
 
-const sequelize = new Sequelize('wadb', 'admin', process.env.DB_PASSWORD, {
-  host: process.env.DB_HOST,
-  port: '3306',
-  dialect: 'mysql'
-})
-
-sequelize.sync({ alter: true })
-
-const User = sequelize.define(
-  'Users',
-  {
-    id_user: {
-      type: Sequelize.DataTypes.INTEGER,
-      primaryKey: 12,
-      autoIncrement: true,
-
-      allowNull: false
-    },
-    user_name: {
-      type: Sequelize.DataTypes.STRING,
-      allowNull: false
-    },
-    password: {
-      type: Sequelize.DataTypes.STRING,
-      allowNull: false
-    },
-    email: {
-      type: Sequelize.DataTypes.STRING,
-      allowNull: false
-    },
-    date: {
-      type: Sequelize.DataTypes.DATE,
-      allowNull: false
-    },
-    partner_name: {
-      type: Sequelize.DataTypes.STRING,
-      allowNull: false
-    }
+const userSchema = new mongoose.Schema({
+  user_name: {
+    type: String,
+    required: true
   },
-  {
-    freezeTableName: true,
-    timestamps: false
+  hashedPassword: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique:true
+  },
+  date: {
+    type: Date,
+    required: true
+  },
+  partner_name: {
+    type: String,
+    required: true,
   }
-)
-
-User.sync({
-  alter: true
 })
-  .then(() => {
-    console.log('tabled added succesfully')
-  })
-  .catch(err => {
-    console.log(err)
-  })
 
+const User = mongoose.model('User', userSchema)
 module.exports = User
