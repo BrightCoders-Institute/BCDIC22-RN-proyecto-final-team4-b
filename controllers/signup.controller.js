@@ -1,6 +1,7 @@
 const db = require('../db/db')
 const cryptojs = require('crypto-js')
 const User = require('../models/user')
+const Wedding=require('../models/wedding')
 
 const createUser = async (req, res) => {
   const { user_name, partner_name, date, password, confirmPassword, email } =
@@ -29,9 +30,17 @@ const createUser = async (req, res) => {
 
         const userSaved = await user.save()
 
+        //Creacion del wedding:
+        const wedding=new Wedding({
+          user_id: userSaved._id
+        })
+
+        const weddingCreated=await wedding.save()
+
         res.status(200).send({
-          message: 'User created successfully',
-          userSaved
+          message: 'User created successfully. Please login',
+          userSaved,
+          weddingCreated
         })
       } catch (error) {
         console.error(error)

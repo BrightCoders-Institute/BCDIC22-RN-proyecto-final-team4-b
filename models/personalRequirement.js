@@ -1,17 +1,33 @@
 const mongoose = require('mongoose')
 
-const weddingSchema = new mongoose.Schema({
-  image1: {
+const personalReqSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required:true
+  },
+  icon:{
+    type:String,
+    required:true
+  },
+  date:{
+    type: Date
+  },
+  category:{
     type: String
   },
-  image2: {
+  note: {
     type: String
   },
-  user_id: {
+  isChecked:{
+    type: Boolean,
+    default:false
+  },
+  wedding_id:{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'Wedding',
+    required:true
   }
 })
 
-const Wedding = mongoose.model('Wedding', weddingSchema)
-module.exports = Wedding
+const PersonalReq = mongoose.model('PersonalReq', personalReqSchema)
+module.exports = PersonalReq
