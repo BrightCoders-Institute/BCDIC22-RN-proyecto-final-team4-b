@@ -55,6 +55,7 @@ const updatePersonalRequirement = async (req, res) => {
       { isChecked: query },
       { new: true }
     )
+    
     res.status(200).send({
       message: 'Requirement status updated successfully',
       updatedRequirement
@@ -76,8 +77,8 @@ const updateDataRequirement = async (req, res) => {
     if (req.body) {
       const updatedRequirement = await PersonalReq.findByIdAndUpdate(
         reqId,
-        req.body, // pass the updated data as the second argument
-        { new: true } // to return the updated document
+        req.body, 
+        { new: true }
       )
 
       res.status(200).send({
