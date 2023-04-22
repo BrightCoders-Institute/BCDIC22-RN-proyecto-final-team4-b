@@ -2,15 +2,17 @@ const mongoose = require('mongoose')
 
 const weddingSchema = new mongoose.Schema({
   image1: {
-    type: String
+    type: String,
+    default: ''
   },
   image2: {
-    type: String
+    type: String,
+    default: ''
   },
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required:true
+    required: true
   }
 })
 
