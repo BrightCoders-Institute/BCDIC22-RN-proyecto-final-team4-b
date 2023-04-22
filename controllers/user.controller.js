@@ -91,32 +91,20 @@ const updateUser = async (request, response) => {
 const updateImages = async (request, response) => {
   const id = request.params.id
   const { image1, image2 } = request.body
-  console.log('backe', request.body)
 
   try {
     const objectId = new ObjectId(id)
     const weddingExists = await Wedding.findById(objectId)
 
     if (weddingExists) {
-      console.log('wed')
-      // if (request.body[0]?.length > 0) {
-      //   console.log('wed1')
-      //   weddingExists.set({ image1: request.body[0] })
-      // }
-      // if (request.body[1]?.length > 0) {
-      //   console.log('wed2')
-      //   weddingExists.set({ image2: request.body[1] })
-      // }
-
       if (request.body[0] !== null) {
-        weddingExists.set({ image1: request.body[0]})
+        weddingExists.set({ image1: request.body[0] })
       }
       if (request.body[1] !== null) {
         weddingExists.set({ image2: request.body[1] })
       }
 
       const savedImages = await weddingExists.save()
-      console.log('wedsavedImages', savedImages)
 
       response.status(200).send({ user: savedImages, message: 'Image updated' })
     } else {
@@ -129,15 +117,15 @@ const updateImages = async (request, response) => {
 
 const getWeddingById = async (request, response) => {
   const id = request.params.id
-  console.log('backend wedding', id)
 
   try {
     const objectId = new ObjectId(id)
     const weddingExists = await Wedding.findById(objectId)
 
     if (weddingExists) {
-      console.log('backend weddingExists', weddingExists)
-      response.status(200).send({ weddingExists, message: 'Wedding info retrieved' })
+      response
+        .status(200)
+        .send({ weddingExists, message: 'Wedding info retrieved' })
     } else {
       response.status(400).send({ message: 'Wedding not found' })
     }

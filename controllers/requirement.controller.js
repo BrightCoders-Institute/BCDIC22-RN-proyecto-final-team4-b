@@ -69,10 +69,8 @@ const updatePersonalRequirement = async (req, res) => {
 }
 
 const updateDataRequirement = async (req, res) => {
-  console.log("uipdated ata")
   try {
     const reqId = req.params.id
-    console.log(req.body, "length")
 
     if (req.body) {
       const updatedRequirement = await PersonalReq.findByIdAndUpdate(
@@ -99,7 +97,6 @@ const updateDataRequirement = async (req, res) => {
 }
 
 const deletePersonalRequirement = async (req, res) => {
-  console.log('Delete api____')
   try {
     const reqId = req.params.id
 
