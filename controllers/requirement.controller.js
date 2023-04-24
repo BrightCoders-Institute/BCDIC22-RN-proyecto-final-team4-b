@@ -55,15 +55,76 @@ const updatePersonalRequirement = async (req, res) => {
       { isChecked: query },
       { new: true }
     )
+    
     res.status(200).send({
-      message: 'Requirement created successfully',
+      message: 'Requirement status updated successfully',
       updatedRequirement
     })
-  } catch (e) {}
+  } catch (e) {
+    console.error(err)
+    res.status(500).send({
+      message: 'Error updating the requirement'
+    })
+  }
+}
+
+const updateDataRequirement = async (req, res) => {
+  try {
+    const reqId = req.params.id
+
+    if (req.body) {
+      const updatedRequirement = await PersonalReq.findByIdAndUpdate(
+        reqId,
+        req.body, 
+        { new: true }
+      )
+
+      res.status(200).send({
+        message: 'Requirement updated successfully',
+        updatedRequirement
+      })
+    }else{
+      res.status(400).send({
+        message: 'You must provide data to update'
+      })
+    }
+  } catch (e) {
+    console.error(e)
+    res.status(500).send({
+      message: 'Error updating the requirement'
+    })
+  }
+}
+
+const deletePersonalRequirement = async (req, res) => {
+  try {
+    const reqId = req.params.id
+
+    const deletedRequirement = await PersonalReq.findByIdAndDelete(reqId)
+
+    if (!deletedRequirement) {
+      return res.status(404).send({
+        message: 'Requirement not found'
+      })
+    }
+
+    res.status(200).send({
+      message: 'Requirement deleted successfully',
+      deletedRequirement
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).send({
+      message: 'Error deleting requirement',
+      error: e
+    })
+  }
 }
 
 module.exports = {
   createPersonalRequirement,
   getPersonalRequirements,
-  updatePersonalRequirement
+  updatePersonalRequirement,
+  deletePersonalRequirement,
+  updateDataRequirement
 }
